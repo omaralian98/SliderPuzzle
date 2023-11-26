@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AAMeQ+3sWYuSb6zrfzRmwDRpJYKne3MJZvcXQK03GGgfShjgYPJoiKvte1j1wG9DzeoYsxDbrX/5Gz75HmXZug==",
+  "dgSpecHash": "dkuIpzd0ZnHRCvn8bfkgARP5kF9cPHvolIRQCWYdX/5J9vH0eFokodQ8Osh1mcRvraUiZ8FKvnSWx5tiTZlkgw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\source\\repos\\SliderPuzzle\\Game\\Game.csproj",
+  "projectFilePath": "C:\\Users\\User\\source\\repos\\SliderPuzzle\\SliderPuzzle\\Game\\Game.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
