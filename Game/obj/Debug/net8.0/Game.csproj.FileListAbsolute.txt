@@ -9,3 +9,15 @@ C:\Users\User\source\repos\SliderPuzzle\Game\obj\Debug\net8.0\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\Game\obj\Debug\net8.0\refint\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\Game\obj\Debug\net8.0\Game.pdb
 C:\Users\User\source\repos\SliderPuzzle\Game\obj\Debug\net8.0\ref\Game.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Debug\net8.0\Game.deps.json
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Debug\net8.0\Game.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Debug\net8.0\Game.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.AssemblyInfo.cs
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.sourcelink.json
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\refint\Game.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\ref\Game.dll

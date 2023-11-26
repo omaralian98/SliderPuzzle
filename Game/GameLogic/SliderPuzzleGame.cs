@@ -36,18 +36,18 @@ public class SliderPuzzleGame(int n)
         }
         throw new Exception("There was no Empty Cell");
     }
-    public bool IsValidMove(Coordinates b)
+    public bool CanMove(Coordinates b)
     {
         Coordinates emptyCell = CoordinatesOfEmptyCell();
         if (b == emptyCell) return false;
         if (emptyCell.Distance(b) != 1) return false;
         return b.x < n && b.x >= 0 && b.y < n && b.y >= 0;
     }
-    public bool MoveCell(Coordinates from, Coordinates to)
+    public bool MoveCell(Coordinates from)
     {
-        Coordinates emptyCell = CoordinatesOfEmptyCell();
-        if (to != emptyCell) return false;
-        if (!IsValidMove(from)) return false;
+        Coordinates to = CoordinatesOfEmptyCell();
+        if (to != from) return false;
+        if (!CanMove(from)) return false;
         board[from.x, from.y].MoveTo(to);
         board[to.x, to.y].MoveTo(from);
         (board[from.x, from.y], board[to.x, to.y]) = (board[to.x, to.y], board[from.x, from.y]);
