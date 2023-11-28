@@ -174,4 +174,16 @@ public class GameUnitTest
         game.InitializeBoard(bor);
         Assert.False(game.MoveCell(new Coordinates(1, 1)));
     }
+    [Fact]
+    public void MoveCellTest4()
+    {
+        int[,] bor =
+        {
+            { 0, 2, 7 },
+            { 3, 1, 6 },
+            { 4, 8, 5 },
+        };
+        game.InitializeBoard(bor);
+        Assert.True(game.MoveCell(new Coordinates(1, 0)));
+    }
 }
