@@ -5,7 +5,7 @@ public class GameUnitTest
     const int n = 3;
     private SliderPuzzleGame game = new SliderPuzzleGame(n);
     [Fact]
-    public void IsGameOverTest1()
+    public void IsOverTest1()
     {
         int[,] bor =
         {
@@ -14,10 +14,10 @@ public class GameUnitTest
             { 7, 8, 0 },
         };
         game.InitializeBoard(bor);
-        Assert.True(game.IsGameOver());
+        Assert.True(game.IsOver());
     }
     [Fact]
-    public void IsGameOverTest2()
+    public void IsOverTest2()
     {
         int[,] bor =
         {
@@ -26,10 +26,10 @@ public class GameUnitTest
             { 7, 0, 8 },
         };
         game.InitializeBoard(bor);
-        Assert.False(game.IsGameOver());
+        Assert.False(game.IsOver());
     }
     [Fact]
-    public void IsGameOverTest3()
+    public void IsOverTest3()
     {
         int[,] bor =
         {
@@ -38,7 +38,7 @@ public class GameUnitTest
             { 4, 8, 5 },
         };
         game.InitializeBoard(bor);
-        Assert.False(game.IsGameOver());
+        Assert.False(game.IsOver());
     }
     [Fact]
     public void CoordinatesOfEmptyCellTest1()

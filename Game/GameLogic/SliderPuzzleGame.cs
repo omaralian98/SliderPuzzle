@@ -1,28 +1,18 @@
 ﻿namespace Game;
 
-public struct SliderPuzzleGame(int n)
+public class SliderPuzzleGame(int n) : Search
 {
-    public Cell[,] board = new Cell[n, n];
-    private int[,] secert = new int[n, n];
-    public void InitializeBoard(int[,] bor)
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                board[i, j] = new Cell(new Coordinates(i, j), bor[i, j]);
-                secert[i, j] = bor[i, j];
-            }
-        }
-    }
-    public bool IsGameOver()
+    public int[,] board = new int[n, n];
+    public int size = n;
+    public void InitializeBoard(int[,] bor) => Array.Copy(bor, board, size*size);
+    public bool IsOver()
     {
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
                 if (i + 1 == n && j + 1 == n) continue;
-                if (board[i, j].content != 1 + j + n * i) return false;
+                if (board[i, j] != 1 + j + n * i) return false;
             }
         }
         return true;
@@ -33,7 +23,7 @@ public struct SliderPuzzleGame(int n)
         {
             for (int j = 0; j < n; j++)
             {
-                if (board[i, j].content == 0) return new Coordinates(i, j);
+                if (board[i, j] == 0) return new Coordinates(i, j);
             }
         }
         throw new Exception("There was no Empty Cell");
@@ -48,22 +38,30 @@ public struct SliderPuzzleGame(int n)
     public bool MoveCell(Coordinates from)
     {
         Coordinates to = CoordinatesOfEmptyCell();
-        if (to == from) return false;
         if (!CanMove(from)) return false;
-        board[from.x, from.y].MoveTo(to);
-        board[to.x, to.y].MoveTo(from);
         (board[from.x, from.y], board[to.x, to.y]) = (board[to.x, to.y], board[from.x, from.y]);
         return true;
     }
 
-    public Coordinates[] GetAllPossibleMoves()
+    public IEnumerable<Coordinates> GetAllPossibleMoves()
     {
-        List<Coordinates> result = new List<Coordinates>();
-        foreach (var it in board)
+        for (int i = 0; i < size; i++)
         {
-            if (CanMove(it.coordinates)) result.Add(it.coordinates);
+            for (int j = 0; j < size; j++)
+            {
+                var coordinates = new Coordinates(i, j);
+                if (CanMove(coordinates)) yield return coordinates;
+            }
         }
-        return result.ToArray();
+    }
+    public IEnumerable<SliderPuzzleGame> GetAllPossibleStates()
+    {
+        foreach (var move in GetAllPossibleMoves())
+        {
+            SliderPuzzleGame next = this.Clone();
+            next.MoveCell(move);
+            yield return next;
+        }
     }
 
     public void PrintBoard()
@@ -78,11 +76,46 @@ public struct SliderPuzzleGame(int n)
         }
         Console.WriteLine("");
     }
+
     public SliderPuzzleGame Clone()
     {
         var newr = new SliderPuzzleGame(n);
-        newr.InitializeBoard(secert);
+        newr.InitializeBoard(board);
         return newr;
+    }
+
+    public int[,] GenerateRandomBoard()
+    {
+        int[,] board = new int[n, n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                board[i, j] = 1 + j + n * i;
+            }
+        }
+        board[n - 1, n - 1] = 0;
+
+        return Shuffle(board);
+    }
+
+    public static T[,] Shuffle<T>(T[,] array)
+    {
+        Random rand = new();
+        int lengthRow = array.GetLength(1);
+        int i = array.Length - 1;
+        while (i-- > 0)
+        {
+            int x = i / lengthRow;
+            int y = i % lengthRow;
+
+            int j = rand.Next(i + 1);
+            int x1 = j / lengthRow;
+            int y1 = j % lengthRow;
+
+            (array[x1, y1], array[x, y]) = (array[x, y], array[x1, y1]);
+        }
+        return array;
     }
     public static bool operator ==(SliderPuzzleGame a, SliderPuzzleGame b)
     {
@@ -109,7 +142,7 @@ public struct SliderPuzzleGame(int n)
         {
             for (int j = 0; j < board.GetLength(1); j++)
             {
-                result += board[i, j].content;
+                result += board[i, j];
             }
         }
         return result;
