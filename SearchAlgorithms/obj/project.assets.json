@@ -1,30 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
-      "Game/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "compile": {
-          "bin/placeholder/Game.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Game.dll": {}
-        }
-      }
-    }
+    "net8.0": {}
   },
-  "libraries": {
-    "Game/1.0.0": {
-      "type": "project",
-      "path": "../Game/Game.csproj",
-      "msbuildProject": "../Game/Game.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0": [
-      "Game >= 1.0.0"
-    ]
+    "net8.0": []
   },
   "packageFolders": {
     "C:\\Users\\User\\.nuget\\packages\\": {},
@@ -58,11 +39,7 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {
-            "C:\\Users\\User\\source\\repos\\SliderPuzzle\\SliderPuzzle\\Game\\Game.csproj": {
-              "projectPath": "C:\\Users\\User\\source\\repos\\SliderPuzzle\\SliderPuzzle\\Game\\Game.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

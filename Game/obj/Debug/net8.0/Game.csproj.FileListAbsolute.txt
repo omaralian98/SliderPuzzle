@@ -21,3 +21,7 @@ C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\refint\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.pdb
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\ref\Game.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Debug\net8.0\SearchAlgorithms.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Debug\net8.0\SearchAlgorithms.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Debug\net8.0\Game.csproj.CopyComplete

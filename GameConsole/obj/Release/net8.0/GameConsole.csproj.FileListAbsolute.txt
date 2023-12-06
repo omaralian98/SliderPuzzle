@@ -1,3 +1,4 @@
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.exe
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\TraceReloggerLib.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\Dia2Lib.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\OSExtensions.dll
@@ -16,11 +17,6 @@ C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\arm64\msvcp140.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\arm64\vcruntime140.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\arm64\vcruntime140_1.dll
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.exe
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.deps.json
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.runtimeconfig.json
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.dll
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\GameConsole.pdb
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\BenchmarkDotNet.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\BenchmarkDotNet.Annotations.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\CommandLine.dll
@@ -81,8 +77,10 @@ C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\runtimes\win-x64\native\capstone.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\runtimes\win-x86\native\capstone.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\runtimes\win\lib\netcoreapp2.0\System.Management.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\EBFCalculator.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\SearchAlgorithms.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\EBFCalculator.pdb
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\Game.pdb
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\SearchAlgorithms.pdb
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\GameConsole.csproj.AssemblyReference.cache
@@ -95,5 +93,3 @@ C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\GameConsole.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\refint\GameConsole.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\GameConsole.pdb
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\GameConsole.genruntimeconfig.cache
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\obj\Release\net8.0\ref\GameConsole.dll

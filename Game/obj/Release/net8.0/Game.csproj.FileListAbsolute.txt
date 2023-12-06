@@ -1,11 +1,15 @@
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Release\net8.0\Game.deps.json
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Release\net8.0\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Release\net8.0\Game.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Release\net8.0\SearchAlgorithms.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\bin\Release\net8.0\SearchAlgorithms.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.csproj.AssemblyReference.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.AssemblyInfoInputs.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.AssemblyInfo.cs
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.sourcelink.json
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.csproj.CopyComplete
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\refint\Game.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\Game\obj\Release\net8.0\Game.pdb

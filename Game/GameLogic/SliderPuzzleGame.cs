@@ -1,6 +1,9 @@
-﻿namespace Game;
+﻿using SearchAlgorithms;
+using System.Text;
 
-public class SliderPuzzleGame(int n) : Search
+namespace Game;
+
+public class SliderPuzzleGame(int n) : ISearch
 {
     public int[,] board = new int[n, n];
     public int size = n;
@@ -54,7 +57,7 @@ public class SliderPuzzleGame(int n) : Search
             }
         }
     }
-    public IEnumerable<SliderPuzzleGame> GetAllPossibleStates()
+    public IEnumerable<ISearch> GetAllPossibleStates()
     {
         foreach (var move in GetAllPossibleMoves())
         {
@@ -64,13 +67,54 @@ public class SliderPuzzleGame(int n) : Search
         }
     }
 
+    public static int ManhattanDistance(ISearch a)
+    {
+        var game = (SliderPuzzleGame)a;
+        int manhattanDistance = 0;
+
+        for (int i = 0; i < game.size; i++)
+        {
+            for (int j = 0; j < game.size; j++)
+            {
+                int value = game.board[i, j];
+                if (value != 0)
+                {
+                    var target = Coordinates._1dTo2d(game.board[i, j], game.size);
+                    manhattanDistance += Math.Abs(i - target.x) + Math.Abs(j - target.y);
+                }
+                else
+                {
+                    manhattanDistance += Math.Abs(i - 2) + Math.Abs(j - 2);
+                }
+            }
+        }
+
+        return manhattanDistance;
+    }
+
+    public static int MisplacedTiles(ISearch a)
+    {
+        var game = (SliderPuzzleGame)a;
+        int totalOfMisplacedTiles = 0;
+
+        for (int i = 0; i < game.size; i++)
+        {
+            for (int j = 0; j < game.size; j++)
+            {
+                int value = game.board[i, j] == 0 ? 9 : game.board[i, j];
+                totalOfMisplacedTiles += value == (1 + j + game.size * i) ? 0 : 1;
+            }
+        }
+        return totalOfMisplacedTiles;
+    }
+
     public void PrintBoard()
     {
         for (int i = 0; i < n; i++)
         {
             for(int j = 0; j < n; j++)
             {
-                Console.Write($"{board[i, j]} ");
+                Console.Write("{0, -5}", board[i, j]);
             }
             Console.WriteLine("");
         }
@@ -95,13 +139,13 @@ public class SliderPuzzleGame(int n) : Search
             }
         }
         board[n - 1, n - 1] = 0;
-
-        return Shuffle(board);
+        board = Shuffle(board);
+        while (!IsSolvable(board)) board = Shuffle(board);
+        return board;
     }
-
+    private static Random rand = new();
     public static T[,] Shuffle<T>(T[,] array)
     {
-        Random rand = new();
         int lengthRow = array.GetLength(1);
         int i = array.Length - 1;
         while (i-- > 0)
@@ -117,6 +161,39 @@ public class SliderPuzzleGame(int n) : Search
         }
         return array;
     }
+    public static T[] Shuffle<T>(T[] array)
+    {
+        for (int s = 0; s < array.Length - 1; s++)
+        {
+            int GenObj = rand.Next(s, array.Length); // pleace, note the range
+
+            // swap procedure: note, var h to store initial array[s] value
+            (array[GenObj], array[s]) = (array[s], array[GenObj]);
+        }
+
+        return array;
+    }
+
+    public int CountInversions(int[] arr)
+    {
+        int counter = 0;
+        for (int i = 0; i < size*size; i++)
+        {
+            for (int j = i + 1; j < size*size; j++)
+            {
+                if (arr[i] > 0 && arr[j] > 0 && arr[i] > arr[j]) counter++;
+            }
+        }
+        return counter;
+    }
+
+    public bool IsSolvable(int[,] board)
+    {
+        int[] result = board.Cast<int>().Select(c => c).ToArray();
+        int inversionCounter = CountInversions(result);
+        return inversionCounter % 2 == 0;
+    }
+
     public static bool operator ==(SliderPuzzleGame a, SliderPuzzleGame b)
     {
         for (int i = 0; i < a.board.GetLength(0); i++)
@@ -137,14 +214,16 @@ public class SliderPuzzleGame(int n) : Search
     }
     public override string ToString()
     {
-        string result = string.Empty;
+        StringBuilder result = new StringBuilder();
+
         for (int i = 0; i < board.GetLength(0); i++)
         {
             for (int j = 0; j < board.GetLength(1); j++)
             {
-                result += board[i, j];
+                result.Append(board[i, j]);
             }
         }
-        return result;
+
+        return result.ToString();
     }
 }

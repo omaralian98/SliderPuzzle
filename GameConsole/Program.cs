@@ -1,29 +1,109 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using EBFCalculator;
 using Game;
-using SearchAlgorithms;
+using SearchAlgorithms.Algorithms;
+using System.Linq;
 
 namespace Mr_Sure21;
-
-[MemoryDiagnoser]
 public class Program
 {
 
     public static void Main()
     {
-        var test = BenchmarkRunner.Run<Program>();
-    }
-    [Benchmark]
-    public void Test()
-    {
-        SliderPuzzleGame game1 = new SliderPuzzleGame(3);
-        int[,] bor = 
+        //FirstAssignment();
+        //Console.ReadLine();
+        //SecondAssignment();
+        //Console.ReadLine();
+        //ThirdAssignment();
+        SliderPuzzleGame initial = new(3);
+        int[,] bor =
         {
-            { 0, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 1, 8 },
+            { 1, 2, 3 },
+            { 5, 6, 0 },
+            { 7, 8, 4 },
         };
-        game1.InitializeBoard(bor);
-        Breadth_First_Search.FindPath(game1);
+        initial.InitializeBoard(bor);
+        initial.PrintBoard();
+        AStarSearch<SliderPuzzleGame> aStarSearch = new();
+        //var result1 = aStarSearch.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var result = aStarSearch.FindPath(initial, SliderPuzzleGame.MisplacedTiles);
+        watch.Stop();
+        var elapsedMs = (double)watch.ElapsedMilliseconds / 1000;
+        Console.WriteLine("Took: {0} s", elapsedMs);
+        Console.WriteLine("Depth: {0}", result.Item1.Count);
+        Console.WriteLine("Discovered: {0}\nVisited: {1}", result.Item2, result.Item3);
+
+    }
+    public static void FirstAssignment()
+    {
+        SliderPuzzleGame initial = new SliderPuzzleGame(3);
+        int[,] bor = initial.GenerateRandomBoard();
+        initial.InitializeBoard(bor);
+        Console.WriteLine("Initial State:");
+        initial.PrintBoard();
+        PrintGoalState();
+        var AStar = new AStarSearch<SliderPuzzleGame>();
+        var resultMisplaced = AStar.FindPath(initial, SliderPuzzleGame.MisplacedTiles);
+        var resultManhattan = AStar.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
+
+        Console.WriteLine("Moves to solve using misplaced tiles heuristic: {0}", resultMisplaced.Item1.Count);
+        Console.WriteLine("Expanded nodes to solve using misplaced tiles heuristic: {0}", resultMisplaced.Item3);
+        Console.WriteLine("Moves to solve using manhattan distance heuristic: {0}", resultManhattan.Item1.Count);
+        Console.WriteLine("Expanded nodes to solve using manhattan distance heuristic: {0}", resultManhattan.Item3);
+    }
+
+    public static void SecondAssignment()
+    {
+        SliderPuzzleGame initial = new SliderPuzzleGame(3);
+        int[,] bor = initial.GenerateRandomBoard();
+        initial.InitializeBoard(bor);
+        Console.WriteLine("Initial State:");
+        initial.PrintBoard();
+        Console.WriteLine("\nMoves to solve:\n");
+        var AStar = new AStarSearch<SliderPuzzleGame>();
+        var result = AStar.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
+
+        for (int i = 0; i < result.Item1.Count - 1; i++)
+        {
+            Console.WriteLine($"Move {i}");
+            result.Item1[i].PrintBoard();
+            Console.WriteLine("\n");
+        }
+        Console.WriteLine($"Move {result.Item1.Count - 1}");
+        PrintGoalState();
+    }
+
+    public static void ThirdAssignment()
+    {
+        Console.WriteLine("\td\t\t EBF Misplaced Tiles\t\tEBF Manhattan Distance");
+        SliderPuzzleGame initial = new(3);
+        var Astar = new AStarSearch<SliderPuzzleGame>();
+        for (int i = 0; i < 100; i++)
+        {
+            initial.InitializeBoard(initial.GenerateRandomBoard());
+            var mis = Astar.FindPath(initial, SliderPuzzleGame.MisplacedTiles);
+            var man = Astar.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
+            if (mis.Item1.Count != man.Item1.Count)
+            {
+                Console.WriteLine("Stopppppp");
+                Console.ReadLine();
+            }
+            Console.WriteLine($"{i + 1}-\t{mis.Item1.Count} \t\t {Math.Round(EBF.GetUsingBiSection(mis.Item1.Count, Convert.ToInt32(mis.Item3)), 4)}\t\t\t\t\t{Math.Round(EBF.GetUsingBiSection(man.Item1.Count, Convert.ToInt32(man.Item3)), 4)}");
+        }
+    }
+    private static void PrintGoalState()
+    {
+        SliderPuzzleGame initial = new SliderPuzzleGame(3);
+        int[,] bor =
+        {
+            { 1, 2, 3 },
+            { 4, 5, 6 },
+            { 7, 8, 0 } 
+        };
+        initial.InitializeBoard(bor);
+        Console.WriteLine("\nGoal State:");
+        initial.PrintBoard();
     }
 }

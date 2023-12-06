@@ -1,13 +1,8 @@
 ﻿namespace SearchAlgorithms;
 
-public class Search 
+public interface ISearch
 {
-    public IEnumerable<Search> GetAllPossibleStates()
-    {
-        return Enumerable.Empty<Search>();
-    }
-    public bool IsOver()
-    {
-        return false;
-    }
+    public bool IsOver();
+    public IEnumerable<ISearch> GetAllPossibleStates();
+    public string ToString();
 }

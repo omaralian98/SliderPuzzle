@@ -1,0 +1,12 @@
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\bin\Release\net8.0\EBFCalculator.deps.json
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\bin\Release\net8.0\EBFCalculator.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\bin\Release\net8.0\EBFCalculator.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.AssemblyInfo.cs
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.sourcelink.json
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\refint\EBFCalculator.dll
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\EBFCalculator.pdb
+C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\EBFCalculator\obj\Release\net8.0\ref\EBFCalculator.dll

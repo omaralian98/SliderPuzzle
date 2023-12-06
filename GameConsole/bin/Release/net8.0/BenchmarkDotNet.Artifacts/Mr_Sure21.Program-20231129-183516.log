@@ -1,0 +1,7 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 1 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// start dotnet  restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true in C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\6787e98b-7b4b-47df-9970-954562addb4e
+// command took 1.39 sec and exited with 0
+// start dotnet  build -c Release --no-restore /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1 /p:Deterministic=true /p:Optimize=true in C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\GameConsole\bin\Release\net8.0\6787e98b-7b4b-47df-9970-954562addb4e

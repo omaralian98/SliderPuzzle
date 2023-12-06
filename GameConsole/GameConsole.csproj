@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EBFCalculator\EBFCalculator.csproj" />
     <ProjectReference Include="..\Game\Game.csproj" />
-    <ProjectReference Include="..\SearchAlgorithms\SearchAlgorithms.csproj" />
   </ItemGroup>
 
 </Project>

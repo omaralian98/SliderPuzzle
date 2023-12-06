@@ -1,15 +1,11 @@
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\bin\Release\net8.0\SearchAlgorithms.deps.json
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\bin\Release\net8.0\SearchAlgorithms.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\bin\Release\net8.0\SearchAlgorithms.pdb
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\bin\Release\net8.0\Game.dll
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\bin\Release\net8.0\Game.pdb
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.csproj.AssemblyReference.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.AssemblyInfoInputs.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.AssemblyInfo.cs
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.sourcelink.json
-C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.csproj.CopyComplete
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\refint\SearchAlgorithms.dll
 C:\Users\User\source\repos\SliderPuzzle\SliderPuzzle\SearchAlgorithms\obj\Release\net8.0\SearchAlgorithms.pdb

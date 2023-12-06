@@ -12,4 +12,8 @@
     <None Remove="UnitTesting\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SearchAlgorithms\SearchAlgorithms.csproj" />
+  </ItemGroup>
+
 </Project>

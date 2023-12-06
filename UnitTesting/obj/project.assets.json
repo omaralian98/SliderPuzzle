@@ -1716,11 +1716,24 @@
       "Game/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SearchAlgorithms": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Game.dll": {}
         },
         "runtime": {
           "bin/placeholder/Game.dll": {}
+        }
+      },
+      "SearchAlgorithms/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/SearchAlgorithms.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SearchAlgorithms.dll": {}
         }
       }
     }
@@ -5522,6 +5535,11 @@
       "type": "project",
       "path": "../Game/Game.csproj",
       "msbuildProject": "../Game/Game.csproj"
+    },
+    "SearchAlgorithms/1.0.0": {
+      "type": "project",
+      "path": "../SearchAlgorithms/SearchAlgorithms.csproj",
+      "msbuildProject": "../SearchAlgorithms/SearchAlgorithms.csproj"
     }
   },
   "projectFileDependencyGroups": {
