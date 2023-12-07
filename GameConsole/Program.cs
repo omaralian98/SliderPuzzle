@@ -9,6 +9,69 @@ namespace Mr_Sure21;
 public class Program
 {
 
+    const int N = 4;
+
+    // A utility function to count inversions in given
+    // array 'arr[]'. Note that this function can be
+    // optimized to work in O(n Log n) time. The idea
+    // here is to keep code small and simple.
+    static int getInvCount(int[] arr)
+    {
+        int inv_count = 0;
+        for (int i = 0; i < N * N - 1; i++)
+        {
+            for (int j = i + 1; j < N * N; j++)
+            {
+                // count pairs(arr[i], arr[j]) such that
+                // i < j but arr[i] > arr[j]
+                if (arr[j] != 0 && arr[i] != 0
+                    && arr[i] > arr[j])
+                    inv_count++;
+            }
+        }
+        return inv_count;
+    }
+
+    // find Position of blank from bottom
+    static int findXPosition(int[,] puzzle)
+    {
+        // start from bottom-right corner of matrix
+        for (int i = N - 1; i >= 0; i--)
+        {
+            for (int j = N - 1; j >= 0; j--)
+            {
+                if (puzzle[i, j] == 0)
+                    return N - i;
+            }
+        }
+        return -1;
+    }
+
+    // This function returns true if given
+    // instance of N*N - 1 puzzle is solvable
+    static bool isSolvable(int[,] puzzle)
+    {
+        int[] arr = new int[N * N];
+        int k = 0;
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                arr[k++] = puzzle[i, j];
+            }
+        }
+
+        // Count inversions in given puzzle
+        int invCount = getInvCount(arr);
+
+
+        int pos = findXPosition(puzzle);
+        if (pos % 2 == 1)
+            return invCount % 2 == 0;
+        else
+            return invCount % 2 == 1;
+    }
+
     public static void Main()
     {
         //FirstAssignment();
@@ -16,19 +79,20 @@ public class Program
         //SecondAssignment();
         //Console.ReadLine();
         //ThirdAssignment();
-        SliderPuzzleGame initial = new(3);
+        SliderPuzzleGame initial = new(4);
         int[,] bor =
         {
-            { 1, 2, 3 },
-            { 5, 6, 0 },
-            { 7, 8, 4 },
+            { 2, 3, 4, 8 },
+            { 1, 6, 0, 12 },
+            { 5, 10, 7, 11 },
+            { 9, 13, 14, 15}
         };
-        initial.InitializeBoard(bor);
+        initial.InitializeBoard(initial.GenerateRandomBoard());
         initial.PrintBoard();
         AStarSearch<SliderPuzzleGame> aStarSearch = new();
         //var result1 = aStarSearch.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
         var watch = System.Diagnostics.Stopwatch.StartNew();
-        var result = aStarSearch.FindPath(initial, SliderPuzzleGame.MisplacedTiles);
+        var result = aStarSearch.FindPath(initial, SliderPuzzleGame.ManhattanDistance);
         watch.Stop();
         var elapsedMs = (double)watch.ElapsedMilliseconds / 1000;
         Console.WriteLine("Took: {0} s", elapsedMs);
@@ -89,8 +153,9 @@ public class Program
             {
                 Console.WriteLine("Stopppppp");
                 Console.ReadLine();
+                initial.PrintBoard();
             }
-            Console.WriteLine($"{i + 1}-\t{mis.Item1.Count} \t\t {Math.Round(EBF.GetUsingBiSection(mis.Item1.Count, Convert.ToInt32(mis.Item3)), 4)}\t\t\t\t\t{Math.Round(EBF.GetUsingBiSection(man.Item1.Count, Convert.ToInt32(man.Item3)), 4)}");
+            Console.WriteLine($"{i + 1}-\t{mis.Item1.Count - 1} \t\t {Math.Round(EBF.GetUsingBiSection(mis.Item1.Count, Convert.ToInt32(mis.Item3)), 4):f4}\t\t\t\t\t{Math.Round(EBF.GetUsingBiSection(man.Item1.Count, Convert.ToInt32(man.Item3)), 4):f4}");
         }
     }
     private static void PrintGoalState()

@@ -23,34 +23,52 @@ public class AStarSearch<TSearch> where TSearch : ISearch
     {
         long DiscoveredNodes = 1;
         long VisitedNodes = 1;
-        SortedList<int, (TSearch, List<TSearch>)> list = new(new DuplicateKeyComparer<int>());
-        HashSet<(string, int)> visited = [];
+        SortedList<int, TSearch> list = new(new DuplicateKeyComparer<int>());
+        HashSet<string> visited = [];
+        Dictionary<string, int> visitedWithCost = [];
+        Dictionary<TSearch, int> g = [];
 
-        list.Add(0, new(initial, []));
-        visited.Add((initial.ToString(), 0));
-
+        list[0] = initial;
+        visited.Add(initial.ToString());
+        visitedWithCost[initial.ToString()] = 0;
+        g[initial] = 0;
+        initial.Parent = null;
+        int counter = 0;
         while (list.Count > 0)
         {
             VisitedNodes++;
-            var (current, path) = list.GetValueAtIndex(0);
-            Console.WriteLine(list.GetKeyAtIndex(0));
-            if (current.IsOver()) return (path, DiscoveredNodes, VisitedNodes); // Return the path when the solution is found
+            TSearch current = list.GetValueAtIndex(0);
+            if (current.IsOver()) return (ConstructPath(current), DiscoveredNodes, VisitedNodes); // Return the path when the solution is found
+            //Console.WriteLine(list.GetKeyAtIndex(0));
             list.RemoveAt(0);
 
-            foreach (var next in current.GetAllPossibleStates())
+            foreach (TSearch next in current.GetAllPossibleStates())
             {
                 string newstr = next.ToString();
-                int newcost = heuristic((TSearch)next) + path.Count + 1;
-                if (!visited.Contains((newstr, newcost)))
+                int newcost = heuristic(next) + g[current] + 1;
+                if ((visited.Contains(newstr) && visitedWithCost[newstr] > newcost) || !visited.Contains(newstr))
                 {
-                    visited.Add((newstr, newcost));
-                    List<TSearch> newPath = [.. path, (TSearch)next];
-                    list.Add(newcost, ((TSearch, List<TSearch>))(next, newPath));
+                    visitedWithCost[newstr] = newcost;
+                    visited.Add(newstr);
+                    list[newcost] = next;
+                    g[next] = g[current] + 1;
                     DiscoveredNodes++;
+                    next.Parent = current;
                 }
             }
         }
         return (new List<TSearch>(), DiscoveredNodes, VisitedNodes); // Return empty List if no solution is found
+    }
+    private List<TSearch> ConstructPath(TSearch init)
+    {
+        var path = new List<TSearch>();
+        while (init.Parent is not null)
+        {
+            path.Add(init);
+            init = (TSearch)init.Parent;
+        }
+        path.Reverse();
+        return path;
     }
 }
 
@@ -67,7 +85,7 @@ public class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparab
         int result = x.CompareTo(y);
 
         if (result == 0)
-            return -1; // Handle equality as being greater. Note: this will break Remove(key) or
+            return 1; // Handle equality as being greater. Note: this will break Remove(key) or
         else          // IndexOfKey(key) since the comparer never returns 0 to signal key equality
             return result;
     }

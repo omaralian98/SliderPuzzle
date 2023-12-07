@@ -144,6 +144,9 @@ public class SliderPuzzleGame(int n) : ISearch
         return board;
     }
     private static Random rand = new();
+    private ISearch? _parent;
+    public ISearch? Parent { get => _parent; set => _parent = value; }
+
     public static T[,] Shuffle<T>(T[,] array)
     {
         int lengthRow = array.GetLength(1);
