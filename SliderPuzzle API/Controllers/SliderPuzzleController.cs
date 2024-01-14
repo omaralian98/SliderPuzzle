@@ -5,9 +5,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Timeouts;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SliderPuzzle_API.Controllers;
-[Route("api/[Controller]")]
+[Route("api")]
 public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : ControllerBase
 {
     [HttpGet]
@@ -16,18 +17,18 @@ public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : C
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
-    public IActionResult Solve([FromQuery] int[] board, [FromQuery] int[]? goal = null)
+    [RequestTimeout(milliseconds: 180000)]
+    public IActionResult Solve([Required][FromQuery] int[] board, [FromQuery] int[]? goal = null)
     {
-        // Set the cancellation token timeout to 2 minutes
-        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
-        var token = cts.Token;
+        _logger.LogInformation("Request Started");
         if (!SliderPuzzleGame.IsValidForm(board))
         {
-            _logger.LogInformation("\nWasn't in correct form");
+            _logger.LogInformation("Wasn't in correct form");
             return BadRequest("The provided board wasn't in the correct form");
         }
 
-        var game = new SliderPuzzleGame(Convert.ToInt32(Math.Sqrt(board.Length)));
+        int size = Convert.ToInt32(Math.Sqrt(board.Length));
+        var game = new SliderPuzzleGame(size);
         var aStar = new AStarSearch<SliderPuzzleGame>();
         game.InitializeBoard(board.ConvertTo2D());
 
@@ -41,28 +42,19 @@ public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : C
         }
         try
         {
-            var steps = new List<SliderPuzzleGame>();
-
-            Task.Run(() =>
-            {
-                (var step, var discoveredNodes, var visitedNodes) =
-                    aStar.FindPath(game, SliderPuzzleGame.ManhattanDistance);
-                steps = step;
-            }, token).Wait(); // Wait for the task to complete or throw an exception if cancelled
-
-            List<int[]> stepsIn1D = steps.Aggregate(new List<int[]> { }, (x, y) =>
+            var result = aStar.FindPath(game, SliderPuzzleGame.ManhattanDistance, HttpContext.RequestAborted);
+            List<int[]> stepsIn1D = result.Result.Steps.Aggregate(new List<int[]> { }, (x, y) =>
             {
                 x.Add(y.board.ConvertTo1D());
                 return x;
             });
-
+            _logger.LogInformation("Request Ended");
             return Ok(stepsIn1D);
         }
-        catch (OperationCanceledException)
+        catch
         {
-            // Handle cancellation here
-            _logger.LogInformation("The operation was canceled after 2 minutes.");
-            return StatusCode(StatusCodes.Status408RequestTimeout, "Operation timed out");
+            _logger.LogInformation($"The operation was canceled.");
+            return StatusCode(StatusCodes.Status408RequestTimeout, "Operation timed out.");
         }
     }
 
@@ -72,59 +64,82 @@ public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : C
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesDefaultResponseType]
-    public IActionResult IsSolveAble([FromQuery] int[] board, [FromQuery] int[]? goal = null)
+    public IActionResult IsSolveAble([Required][FromQuery] int[] board, [FromQuery] int[]? goal = null)
     {
         _logger.LogInformation("Request Started");
         if (!SliderPuzzleGame.IsValidForm(board))
         {
             return BadRequest("The provided board wasn't in correct form");
         }
-        var game = new SliderPuzzleGame(Convert.ToInt32(Math.Sqrt(board.Length)));
+        int size = Convert.ToInt32(Math.Sqrt(board.Length));
+        var game = new SliderPuzzleGame(size);
         game.InitializeBoard(board.ConvertTo2D());
         if (goal is not null) game.InitializeGoal(goal.ConvertTo2D());
         _logger.LogInformation("Request Ended");
         return Ok(SliderPuzzleGame.IsSolvable(game.board, game.goal));
     }
 
+
     [HttpGet]
-    [Route("test/{str}")]
-    [RequestTimeout(milliseconds: 60)]
-    public async Task<IActionResult> Test(string str)
+    [Route("Generate/{size}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public IActionResult GenerateRandomBoard(int size)
     {
-        var ts = new CancellationTokenSource();
-        CancellationToken ct = ts.Token;
-        Task.Factory.StartNew(() =>
+        _logger.LogInformation("Request Started");
+        if (size <= 0)
         {
-            while (true)
-            {
-                // do some heavy work here
-                Thread.Sleep(100);
-                if (ct.IsCancellationRequested)
-                {
-                    // another thread decided to cancel
-                    Console.WriteLine("task canceled");
-                    break;
-                }
-            }
-        }, ct);
-
-        // Simulate waiting 3s for the task to complete
-        Thread.Sleep(3000);
-
-        // Can't wait anymore => cancel this task 
-        ts.Cancel();
-        _logger.LogInformation("Started");
-        try
-        {
-            await Task.Delay(2000, HttpContext.RequestAborted);
-
+            return BadRequest("Incorrect value.");
         }
-        catch (Exception ex)
-        {
-            return Ok(ex.Message);
-        }
-        _logger.LogInformation("Finished");
-        return Ok(str);
+        int[,] board = SliderPuzzleGame.GenerateRandomBoard(size);
+        _logger.LogInformation("Request Ended");
+        return Ok(board.ConvertTo1D());
     }
 
+    [HttpGet]
+    [Route("Move/{index}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public IActionResult Move([Required][FromQuery] int[] board, int index)
+    {
+        _logger.LogInformation("Request Started");
+        if (!SliderPuzzleGame.IsValidForm(board))
+        {
+            return BadRequest("The provided board wasn't in correct form");
+        }
+        int size = Convert.ToInt32(Math.Sqrt(board.Length));
+        var game = new SliderPuzzleGame(size);
+        game.InitializeBoard(board.ConvertTo2D());
+        var move = Coordinates._1dTo2d(index, size);
+        _logger.LogInformation($"({move.x}, {move.y})");
+        if (!game.MoveCell(move))
+        {
+            return BadRequest("This cell can't be moved.");
+        }
+        _logger.LogInformation("Request Ended");
+        return Ok(game.board.ConvertTo1D());
+    }
+
+    [HttpGet]
+    [Route("IsValidMove/{index}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
+    public IActionResult IsValidMove([Required][FromQuery] int[] board, int index)
+    {
+        _logger.LogInformation("Request Started");
+        if (!SliderPuzzleGame.IsValidForm(board))
+        {
+            return BadRequest("The provided board wasn't in correct form");
+        }
+        int size = Convert.ToInt32(Math.Sqrt(board.Length));
+        var game = new SliderPuzzleGame(size);
+        game.InitializeBoard(board.ConvertTo2D());
+        var move = Coordinates._1dTo2d(index, size);
+        _logger.LogInformation($"({move.x}, {move.y})");
+        _logger.LogInformation("Request Ended");
+        return Ok(game.CanMove(move));
+    }
 }

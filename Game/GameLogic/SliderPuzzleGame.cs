@@ -8,13 +8,29 @@ namespace Game;
 /// This class represent a Slider Puzzle Game.
 /// </summary>
 /// <param name="size">The length and width of the board</param>
-public class SliderPuzzleGame(int size) : ISearch
+public class SliderPuzzleGame : ISearch
 {
-    public int[,] board = new int[size, size];
-    public int[,] goal = new int[size, size];
-    public int size = size;
+    public int[,] board { get; set; }
+    public int[,] goal { get; set; }
+    public int size { get; set; }
     private ISearch? _parent;
     public ISearch? Parent { get => _parent; set => _parent = value; }
+    public SliderPuzzleGame(int size)
+    {
+        this.size = size;
+        board = new int[size, size];
+        goal = new int[size, size];
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                board[i, j] = 1 + j + size * i;
+                goal[i, j] = 1 + j + size * i;
+            }
+        }
+        board[size - 1, size - 1] = 0;
+        goal[size - 1, size - 1] = 0;
+    }
 
     /// <summary>
     /// This Function initializes the board. 
@@ -156,26 +172,6 @@ public class SliderPuzzleGame(int size) : ISearch
         return newr;
     }
 
-    /// <summary>
-    /// This function generates a random board.
-    /// </summary>
-    /// <returns>2d array that represents the board</returns>
-    public int[,] GenerateRandomBoard()
-    {
-        int[,] board = new int[size, size];
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                board[i, j] = 1 + j + size * i;
-            }
-        }
-        board[size - 1, size - 1] = 0;
-        board = Shuffle(board);
-        while (!IsSolvable(board, goal)) board = Shuffle(board);
-        return board;
-    }
-
     public override string ToString()
     {
         StringBuilder result = new();
@@ -267,6 +263,29 @@ public class SliderPuzzleGame(int size) : ISearch
         }
         result.AppendLine("");
         return result.ToString();
+    }
+
+    /// <summary>
+    /// This function generates a random board.
+    /// </summary>
+    /// <returns>2d array that represents the board</returns>
+    public static int[,] GenerateRandomBoard(int size)
+    {
+        int[,] board = new int[size, size];
+        int[,] goal = new int[size, size];
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                board[i, j] = 1 + j + size * i;
+                goal[i, j] = 1 + j + size * i;
+            }
+        }
+        board[size - 1, size - 1] = 0;
+        goal[size - 1, size - 1] = 0;
+        board = Shuffle(board);
+        while (!IsSolvable(board, goal)) board = Shuffle(board);
+        return board;
     }
 
     private static Random rand = new();

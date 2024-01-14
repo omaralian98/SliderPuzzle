@@ -19,7 +19,8 @@ public class AStarSearch<TSearch> where TSearch : ISearch
     /// <br></br>
     /// The number of visited nodes.
     /// </returns>
-    public (List<TSearch>, long, long) FindPath(TSearch initial, MyFunction heuristic)
+    /// <exception cref="OperationCanceledException"></exception>
+    public async Task<SearchResult<TSearch>> FindPath(TSearch initial, MyFunction heuristic, CancellationToken token)
     {
         long DiscoveredNodes = 1;
         long VisitedNodes = 1;
@@ -33,33 +34,45 @@ public class AStarSearch<TSearch> where TSearch : ISearch
         visitedWithCost[initial.ToString()] = 0;
         g[initial] = 0;
         initial.Parent = null;
-        int counter = 0;
-        while (list.Count > 0)
+        TSearch? result = await Task.Run(() =>
         {
-            VisitedNodes++;
-            TSearch current = list.GetValueAtIndex(0);
-            if (current.IsOver()) return (ConstructPath(current), DiscoveredNodes, VisitedNodes); // Return the path when the solution is found
-            //Console.WriteLine(list.GetKeyAtIndex(0));
-            list.RemoveAt(0);
-
-            foreach (TSearch next in current.GetAllPossibleStates())
+            while (list.Count > 0)
             {
-                string newstr = next.ToString();
-                int newcost = heuristic(next) + g[current] + 1;
-                if ((visited.Contains(newstr) && visitedWithCost[newstr] > newcost) || !visited.Contains(newstr))
+                if (token.IsCancellationRequested) throw new TaskCanceledException("Operation was canceled.");
+                VisitedNodes++;
+                TSearch current = list.Values[0];
+                if (current.IsOver())
                 {
-                    visitedWithCost[newstr] = newcost;
-                    visited.Add(newstr);
-                    list[newcost] = next;
-                    g[next] = g[current] + 1;
-                    DiscoveredNodes++;
-                    next.Parent = current;
+                    return Task.FromResult(current);
+                }
+
+                list.RemoveAt(0);
+
+                foreach (TSearch next in current.GetAllPossibleStates())
+                {
+                    string newstr = next.ToString();
+                    int newcost = heuristic(next) + g[current] + 1;
+                    if ((visited.Contains(newstr) && visitedWithCost[newstr] > newcost) || !visited.Contains(newstr))
+                    {
+                        visitedWithCost[newstr] = newcost;
+                        visited.Add(newstr);
+                        list[newcost] = next;
+                        g[next] = g[current] + 1;
+                        DiscoveredNodes++;
+                        next.Parent = current;
+                    }
                 }
             }
-        }
-        return (new List<TSearch>(), DiscoveredNodes, VisitedNodes); // Return empty List if no solution is found
+            return null;
+        });
+        return new SearchResult<TSearch>
+        {
+            Steps = ConstructPath(result),
+            DiscoveredNodes = DiscoveredNodes,
+            VisitedNodes = VisitedNodes
+        };
     }
-    private List<TSearch> ConstructPath(TSearch init)
+    private static List<TSearch> ConstructPath(TSearch init)
     {
         var path = new List<TSearch>();
         while (init.Parent is not null)

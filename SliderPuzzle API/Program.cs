@@ -1,24 +1,22 @@
 using Microsoft.AspNetCore.Http.Timeouts;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRequestTimeouts();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-app.MapGet("/attribute",
-    [RequestTimeout(milliseconds: 2000)] async (HttpContext context) => {
-        try
-        {
-            await Task.Delay(TimeSpan.FromSeconds(10), context.RequestAborted);
-        }
-        catch (TaskCanceledException)
-        {
-            return Results.Content("Timeout!", "text/plain");
-        }
-
-        return Results.Content("No timeout!", "text/plain");
-    });
 app.UseRequestTimeouts();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
