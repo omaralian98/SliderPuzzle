@@ -1,4 +1,4 @@
-﻿namespace SearchAlgorithms;
+﻿namespace Search_Algorithms;
 
 public class SearchResult<T>
 {

@@ -2,45 +2,46 @@ namespace UnitTesting;
 
 public class CoordinatesUnitTest
 {
-    [Fact]
-    public void EqualTest()
+
+    public static TheoryData<Coordinates, Coordinates, decimal> DistanceTestData =>
+        new()
+        {
+            { new Coordinates(1, 1), new Coordinates(1, 1), 0 },
+            { new Coordinates(1, 1), new Coordinates(1, 2), 1 },
+            { new Coordinates(1, 1), new Coordinates(0, 1), 1 },
+            { new Coordinates(1, 1), new Coordinates(2, 2), (decimal)Math.Sqrt(2) }
+        };
+
+    public static TheoryData<Coordinates, Coordinates, bool> EqualityTestData =>
+        new()
+        {
+            { new Coordinates(1, 1), new Coordinates(1, 1), true },
+            { new Coordinates(1, 1), new Coordinates(1, 2), false },
+            { new Coordinates(1, 1), new Coordinates(0, 1), false },
+            { new Coordinates(1, 1), new Coordinates(2, 2), false }
+        };
+
+    [Theory]
+    [MemberData(nameof(DistanceTestData))]
+    public void DistanceTest(Coordinates co1, Coordinates co2, decimal expectedValue)
     {
-        Coordinates co1 = new Coordinates(1, 1);
-        Coordinates co2 = new Coordinates(1, 1);
-        Assert.True(co1 == co2);
-        Assert.False(co1 != co2);
+        Assert.Equal(expectedValue, co1.Distance(co2));
     }
 
-    [Fact]
-    public void DistanceTest1()
+    [Theory]
+    [MemberData(nameof(EqualityTestData))]
+    public void EqualityTest(Coordinates co1, Coordinates co2, bool shouldBeEqual)
     {
-        Coordinates co1 = new Coordinates(1, 1);
-        Coordinates co2 = new Coordinates(1, 1);
-        decimal expectecValue = 0;
-        Assert.Equal(expectecValue, co1.Distance(co2));
+        if (shouldBeEqual)
+        {
+            Assert.True(co1 == co2);
+            Assert.False(co1 != co2);
+        }
+        else
+        {
+            Assert.False(co1 == co2);
+            Assert.True(co1 != co2);
+        }
     }
-    [Fact]
-    public void DistanceTest2()
-    {
-        Coordinates co1 = new Coordinates(1, 1);
-        Coordinates co2 = new Coordinates(1, 2);
-        decimal expectecValue = 1;
-        Assert.Equal(expectecValue, co1.Distance(co2));
-    }
-    [Fact]
-    public void DistanceTest3()
-    {
-        Coordinates co1 = new Coordinates(1, 1);
-        Coordinates co2 = new Coordinates(0, 1);
-        decimal expectecValue = 1;
-        Assert.Equal(expectecValue, co1.Distance(co2));
-    }
-    [Fact]
-    public void DistanceTest4()
-    {
-        Coordinates co1 = new Coordinates(1, 1);
-        Coordinates co2 = new Coordinates(2, 2);
-        decimal expectecValue = 1;
-        Assert.NotEqual(expectecValue, co1.Distance(co2));
-    }
+
 }

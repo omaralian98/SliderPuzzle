@@ -1,11 +1,9 @@
 using Game;
 using Game.GameLogic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Timeouts;
-using System;
 using System.ComponentModel.DataAnnotations;
+using Search_Algorithms.Algorithms;
 
 namespace SliderPuzzle_API.Controllers;
 [Route("api")]
@@ -29,7 +27,6 @@ public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : C
 
         int size = Convert.ToInt32(Math.Sqrt(board.Length));
         var game = new SliderPuzzleGame(size);
-        var aStar = new AStarSearch<SliderPuzzleGame>();
         game.InitializeBoard(board.ConvertTo2D());
 
         if (goal is not null) game.InitializeGoal(goal.ConvertTo2D());
@@ -42,10 +39,10 @@ public class SliderPuzzleController(ILogger<SliderPuzzleController> _logger) : C
         }
         try
         {
-            var result = aStar.FindPath(game, SliderPuzzleGame.ManhattanDistance, HttpContext.RequestAborted);
+            var result = AStarSearch.FindPath(game, SliderPuzzleGame.ManhattanDistance, token: HttpContext.RequestAborted);
             List<int[]> stepsIn1D = result.Result.Steps.Aggregate(new List<int[]> { }, (x, y) =>
             {
-                x.Add(y.board.ConvertTo1D());
+                x.Add(((SliderPuzzleGame)y).board.ConvertTo1D());
                 return x;
             });
             _logger.LogInformation("Request Ended");

@@ -24,9 +24,4 @@ public class EBF
             else return BiSection(x, b, depth, nodes, error);
         }
     }
-
-    private class NewtonsSolve
-    {
-
-    }
 }

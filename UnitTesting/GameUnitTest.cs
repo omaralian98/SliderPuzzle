@@ -4,68 +4,370 @@ public class GameUnitTest
 {
     const int n = 3;
     private SliderPuzzleGame game = new SliderPuzzleGame(n);
-    [Fact]
-    public void IsOverTest1()
-    {
-        int[,] bor =
+
+    public static TheoryData<int[,], bool> IsOverTestData =>
+            new()
+            {
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 }
+                    },
+                    true
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 0, 8 }
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 }
+                    },
+                    false
+                },
+            };
+
+    public static TheoryData<int[,], Coordinates> CoordinatesOfEmptyCellTestData =>
+            new()
+            {
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 }
+                    },
+                    new Coordinates(2, 2)
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 }
+                    },
+                    new Coordinates(0, 0)
+                },
+                {
+                    new int[,]
+                    {
+                        { 9, 2, 0 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 }
+                    },
+                    new Coordinates(0, 2)
+                },
+            };
+    public static TheoryData<int[,], Coordinates, bool> CanMoveTestData =>
+            new()
+            {
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 },
+                    },
+                    new Coordinates(0, 1),
+                    true
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 },
+                    },
+                    new Coordinates(1, 0),
+                    true
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 },
+                    },
+                    new Coordinates(0, 0),
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 },
+                    },
+                    new Coordinates(5, 2),
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 0, 2, 7 },
+                        { 3, 1, 6 },
+                        { 4, 8, 5 },
+                    },
+                    new Coordinates(2, 2),
+                    false
+                }
+            };
+
+    public static TheoryData<int[], bool> IsValidFormTestData =>
+            new()
+            {
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 8, 0],
+                    true
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 0, 0],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 1, 0],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 1, 0, 9],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 1, 0, 9, 10],
+                    false
+                },
+            };
+
+    public static TheoryData<int[,], bool> IsValidForm2DTestData =>
+            new()
+            {
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 },
+                    },
+                    true
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 9 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 0, 0 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 1, 0 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3, 9 },
+                        { 4, 5, 6, 10 },
+                        { 7, 8, 0, 11 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 },
+                        { 9, 10, 11 },
+                    },
+                    false
+                },
+            };
+
+    public static TheoryData<int[], int[], bool> IsValidFormWithGoalTestData =>
+            new()
+            {
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 8, 0],
+                    [8, 0, 2, 4, 5, 6, 7, 1, 3],
+                    true
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 9, 0],
+                    [8, 0, 2, 4, 5, 6, 7, 1, 3],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 0, 0],
+                    [8, 0, 2, 4, 5, 6, 7, 1, 3],
+                    false
+                },
+                {
+                    [1, 2, 3, 9, 5, 6, 7, 10, 0],
+                    [8, 0, 2, 4, 5, 6, 7, 1, 3],
+                    false
+                },
+                {
+                    [1, 2, 3, 4, 5, 6, 7, 8, 0, 9],
+                    [8, 0, 2, 4, 5, 6, 7, 1, 3, 9],
+                    false
+                },
+            };
+
+    public static TheoryData<int[,], int[,], bool> IsValidForm2DWithGoalTestData =>
+        new()
         {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 0 },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2 },
+                        { 4, 5, 6 },
+                        { 7, 1, 3 },
+                    },
+                    true
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 0, 0 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2 },
+                        { 4, 5, 6 },
+                        { 7, 1, 3 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 9, 0 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2 },
+                        { 4, 5, 6 },
+                        { 7, 1, 3 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 9, 5, 6 },
+                        { 7, 10, 0 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2 },
+                        { 4, 5, 6 },
+                        { 7, 1, 3 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3 },
+                        { 4, 5, 6 },
+                        { 7, 8, 0 },
+                        { 9, 10, 11 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2 },
+                        { 4, 5, 6 },
+                        { 7, 1, 3 },
+                        { 9, 10, 11 },
+                    },
+                    false
+                },
+                {
+                    new int[,]
+                    {
+                        { 1, 2, 3, 9 },
+                        { 4, 5, 6, 10 },
+                        { 7, 8, 0, 11 },
+                    },
+                    new int[,]
+                    {
+                        { 8, 0, 2, 9 },
+                        { 4, 5, 6, 10 },
+                        { 7, 1, 3, 11 },
+                    },
+                    false
+                },
         };
-        game.InitializeBoard(bor);
-        Assert.True(game.IsOver());
-    }
-    [Fact]
-    public void IsOverTest2()
+
+
+    [Theory]
+    [MemberData(nameof(IsOverTestData))]
+    public void IsOverTest(int[,] board, bool expected)
     {
-        int[,] bor =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 0, 8 },
-        };
-        game.InitializeBoard(bor);
-        Assert.False(game.IsOver());
+        game.InitializeBoard(board);
+        Assert.Equal(expected, game.IsOver());
     }
-    [Fact]
-    public void IsOverTest3()
+
+    [Theory]
+    [MemberData(nameof(CoordinatesOfEmptyCellTestData))]
+    public void CoordinatesOfEmptyCellTest(int[,] board, Coordinates expected)
     {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Assert.False(game.IsOver());
+        game.InitializeBoard(board);
+        Assert.Equal(expected, SliderPuzzleGame.CoordinatesOfEmptyCell(board));
     }
-    [Fact]
-    public void CoordinatesOfEmptyCellTest1()
+
+    [Theory]
+    [MemberData(nameof(CanMoveTestData))]
+    public void CanMoveTest(int[,] board, Coordinates move, bool expected)
     {
-        int[,] bor =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 0 },
-        };
-        game.InitializeBoard(bor);
-        Coordinates expectedValue = new Coordinates(2, 2);
-        Assert.Equal(SliderPuzzleGame.CoordinatesOfEmptyCell(bor), expectedValue);
+        game.InitializeBoard(board);
+        bool result = game.CanMove(move);
+        Assert.Equal(expected, result);
     }
-    [Fact]
-    public void CoordinatesOfEmptyCellTest2()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Coordinates expectedValue = new Coordinates(0, 0);
-        Assert.Equal(SliderPuzzleGame.CoordinatesOfEmptyCell(bor), expectedValue);
-    }
+
+
+
+
     [Fact]
     public void CoordinatesOfEmptyCellTest3()
     {
@@ -77,379 +379,67 @@ public class GameUnitTest
         };
         Assert.Throws<EmptyCellNotFound>(() => { SliderPuzzleGame.CoordinatesOfEmptyCell(bor); });
     }
+
     [Fact]
-    public void CanMoveTest1()
+    public void MoveCell_InvalidCoordinates_ReturnsFalse()
     {
-        int[,] bor =
+        int[,] board =
         {
             { 0, 2, 7 },
             { 3, 1, 6 },
             { 4, 8, 5 },
         };
-        game.InitializeBoard(bor);
-        Assert.True(game.CanMove(new Coordinates(0, 1)));
-    }
-    [Fact]
-    public void CanMoveTest2()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Assert.True(game.CanMove(new Coordinates(1, 0)));
-    }
-    [Fact]
-    public void CanMoveTest3()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Assert.False(game.CanMove(new Coordinates(0, 0)));
-    }
-    [Fact]
-    public void CanMoveTest4()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Assert.False(game.CanMove(new Coordinates(5, 2)));
-    }
-    [Fact]
-    public void CanMoveTest5()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
-        Assert.False(game.CanMove(new Coordinates(2, 2)));
-    }
-    [Fact]
-    public void MoveCellTest1()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
+        game.InitializeBoard(board);
+
         Assert.False(game.MoveCell(new Coordinates(2, 2)));
-    }
-    [Fact]
-    public void MoveCellTest2()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
         Assert.False(game.MoveCell(new Coordinates(5, 5)));
-    }
-    [Fact]
-    public void MoveCellTest3()
-    {
-        int[,] bor =
-        {
-            { 0, 2, 7 },
-            { 3, 1, 6 },
-            { 4, 8, 5 },
-        };
-        game.InitializeBoard(bor);
         Assert.False(game.MoveCell(new Coordinates(1, 1)));
     }
+
     [Fact]
-    public void MoveCellTest4()
+    public void MoveCell_ValidCoordinates_ReturnsTrue()
     {
-        int[,] bor =
+        int[,] board =
         {
             { 0, 2, 7 },
             { 3, 1, 6 },
             { 4, 8, 5 },
         };
-        game.InitializeBoard(bor);
+        game.InitializeBoard(board);
+
         Assert.True(game.MoveCell(new Coordinates(1, 0)));
     }
-    [Fact]
-    public void IsValidFormTest1()
+
+    [Theory]
+    [MemberData(nameof(IsValidFormTestData))]
+    public void IsValidFormTest(int[] board, bool expected)
     {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 8, 0];
         bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.True(result);
-    }
-    [Fact]
-    public void IsValidFormTest2()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
+        Assert.Equal(expected, result);
     }
 
-    [Fact]
-    public void IsValidFormTest3()
+    [Theory]
+    [MemberData(nameof(IsValidForm2DTestData))]
+    public void IsValidForm2DTest(int[,] board, bool expected)
     {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 0, 0];
         bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest4()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 1, 0];
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest5()
-    {
-        int[,] board = 
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 0 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.True(result);
-    }
-    [Fact]
-    public void IsValidFormTest6()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 9 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
+        Assert.Equal(expected, result);
     }
 
-    [Fact]
-    public void IsValidFormTest7()
+    [Theory]
+    [MemberData(nameof(IsValidFormWithGoalTestData))]
+    public void IsValidFormWithGoalTest(int[] board, int[] goal, bool expected)
     {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 0, 0 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest8()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 1, 0 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest9()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 8, 0];
-        int[] goal = [8, 0, 2, 4, 5, 6, 7, 1, 3];
         bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.True(result);
+        Assert.Equal(expected, result);
     }
-    [Fact]
-    public void IsValidFormTest10()
+
+    [Theory]
+    [MemberData(nameof(IsValidForm2DWithGoalTestData))]
+    public void IsValidForm2DWithGoalTest(int[,] board, int[,] goal, bool expected)
     {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 0, 0];
-        int[] goal = [8, 0, 2, 4, 5, 6, 7, 1, 3];
         bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
+        Assert.Equal(expected, result);
     }
-    [Fact]
-    public void IsValidFormTest11()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 9, 0];
-        int[] goal = [8, 0, 2, 4, 5, 6, 7, 1, 3];
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest12()
-    {
-        int[] board = [1, 2, 3, 9, 5, 6, 7, 10, 0];
-        int[] goal = [8, 0, 2, 4, 5, 6, 7, 1, 3];
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest13()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 1, 0, 9];
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest14()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 1, 0, 9, 10];
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest15()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3, 9 },
-            { 4, 5, 6, 10 },
-            { 7, 8, 0, 11 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest16()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 0 },
-            { 9, 10, 11 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest17()
-    {
-        int[] board = [1, 2, 3, 4, 5, 6, 7, 8, 0, 9];
-        int[] goal = [8, 0, 2, 4, 5, 6, 7, 1, 3, 9];
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest18()
-    {
-        int[,] board = 
-        {
-            { 1, 2, 3 }, 
-            { 4, 5, 6 }, 
-            { 7, 8, 0 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2 },
-            { 4, 5, 6 },
-            { 7, 1, 3 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.True(result);
-    }
-    [Fact]
-    public void IsValidFormTest19()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 0, 0 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2 },
-            { 4, 5, 6 },
-            { 7, 1, 3 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest20()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 9, 0 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2 },
-            { 4, 5, 6 },
-            { 7, 1, 3 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest21()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 9, 5, 6 },
-            { 7, 10, 0 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2 },
-            { 4, 5, 6 },
-            { 7, 1, 3 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest22()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3 },
-            { 4, 5, 6 },
-            { 7, 8, 0 },
-            { 9, 10, 11 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2 },
-            { 4, 5, 6 },
-            { 7, 1, 3 },
-            { 9, 10, 11 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
-    [Fact]
-    public void IsValidFormTest23()
-    {
-        int[,] board =
-        {
-            { 1, 2, 3, 9 },
-            { 4, 5, 6, 10 },
-            { 7, 8, 0, 11 },
-        };
-        int[,] goal =
-        {
-            { 8, 0, 2, 9 },
-            { 4, 5, 6, 10 },
-            { 7, 1, 3, 11 },
-        };
-        bool result = SliderPuzzleGame.IsValidForm(board, goal);
-        Assert.False(result);
-    }
+
 }

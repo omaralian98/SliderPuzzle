@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SearchAlgorithms\SearchAlgorithms.csproj" />
+    <ProjectReference Include="..\Search_Algorithms\Search_Algorithms.csproj" />
   </ItemGroup>
 
 </Project>

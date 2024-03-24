@@ -1,5 +1,5 @@
 ﻿using Game.GameLogic;
-using SearchAlgorithms;
+using Search_Algorithms;
 using System.Text;
 
 namespace Game;
@@ -8,13 +8,15 @@ namespace Game;
 /// This class represent a Slider Puzzle Game.
 /// </summary>
 /// <param name="size">The length and width of the board</param>
-public class SliderPuzzleGame : ISearch
+public class SliderPuzzleGame : ISearchable
 {
     public int[,] board { get; set; }
     public int[,] goal { get; set; }
     public int size { get; set; }
-    private ISearch? _parent;
-    public ISearch? Parent { get => _parent; set => _parent = value; }
+    private ISearchable? _parent;
+    public ISearchable? Parent { get => _parent; set => _parent = value; }
+    public SearchState State { get; set; }
+
     public SliderPuzzleGame(int size)
     {
         this.size = size;
@@ -138,7 +140,7 @@ public class SliderPuzzleGame : ISearch
     /// This function gets all the possible moves in a different state.
     /// </summary>
     /// <returns>List of all new states</returns>
-    public IEnumerable<ISearch> GetAllPossibleStates()
+    public IEnumerable<ISearchable> GetAllPossibleStates()
     {
         foreach (var move in GetAllPossibleMoves())
         {
@@ -208,7 +210,7 @@ public class SliderPuzzleGame : ISearch
     /// </summary>
     /// <param name="a">The Game</param>
     /// <returns>The manhattan distance</returns>
-    public static int ManhattanDistance(ISearch a)
+    public static int ManhattanDistance(ISearchable a)
     {
         var game = (SliderPuzzleGame)a;
         int manhattanDistance = 0;
@@ -235,7 +237,7 @@ public class SliderPuzzleGame : ISearch
     /// </summary>
     /// <param name="a">The Game</param>
     /// <returns>The number of misplaced tiles</returns>
-    public static int MisplacedTiles(ISearch a)
+    public static int MisplacedTiles(ISearchable a)
     {
         var game = (SliderPuzzleGame)a;
         int totalOfMisplacedTiles = 0;

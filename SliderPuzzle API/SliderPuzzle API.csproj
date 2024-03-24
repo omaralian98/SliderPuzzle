@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EBFCalculator\EBFCalculator.csproj" />
     <ProjectReference Include="..\Game\Game.csproj" />
-    <ProjectReference Include="..\SearchAlgorithms\SearchAlgorithms.csproj" />
+    <ProjectReference Include="..\Search_Algorithms\Search_Algorithms.csproj" />
   </ItemGroup>
 
 	<PropertyGroup>
